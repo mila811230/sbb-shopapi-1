@@ -46,5 +46,25 @@ public class HomeController {
         model.addAttribute("users", users);
         return "user-list";
     }
+    
+ // 사용자의 권한 목록 조회
+    @GetMapping("/user/{userId}/roles")
+    public String userRoles(@PathVariable("userId") Long userId, Model model) {
+        List<Role> roles = userMapper.findRolesByUserId(userId);
+        String username = userMapper.findById(userId).getUsername();
+
+        model.addAttribute("roles", roles);
+        model.addAttribute("username", username);
+        model.addAttribute("userId", userId);
+
+        return "user-roles";
+    }
+
+    // 선택적: 권한 추가 처리
+    @PostMapping("/user/{userId}/role/add")
+    public String addRole(@PathVariable("userId") Long userId, @RequestParam("roleId") Long roleId) {
+        userMapper.insertUserRole(userId, roleId);
+        return "redirect:/user/%d/roles".formatted(userId);
+    }
 
 }
