@@ -19,6 +19,9 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
+	
+	private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @GetMapping("/")
     public String home() {
@@ -34,6 +37,14 @@ public class HomeController {
     @GetMapping("/login")
     public String loginPage() {
         return "login";
+    }
+    
+ // 사용자 목록
+    @GetMapping("/users")
+    public String userList(Model model) {
+        List<User> users = userMapper.findAll(); // findAll 메서드 추가 필요
+        model.addAttribute("users", users);
+        return "user-list";
     }
 
 }
